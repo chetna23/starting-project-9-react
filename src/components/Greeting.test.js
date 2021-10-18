@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Greeting from './Greeting';
 
+jest.mock('./Async', () => () => <div>Mock</div>);
+
 describe('Greeting component', () => {
   // test('renders Hello World as a text', () => {
   //   //Arrange
@@ -17,9 +19,27 @@ describe('Greeting component', () => {
   //   expect(helloWorldElement).toBeInTheDocument();
   // });
 
+  beforeEach(() => {
+    // jest.resetModules();
+    jest.doMock('./Async', () => {
+      const Async = () => <div>Mock</div>;
+      return Async;
+    });
+  });
+
   test("renders It's good to see you when button was NOT clicked", () => {
-    // jest.setMock('./Async', 'Async');
-    jest.mock('./Async', () => () => <div>Hello World</div>);
+    // jest.mock('./Async', () => {
+    //   return jest.fn(() => `<div>Mock</div>`);
+    // });
+
+    // jest.mock('./Async', () => {
+    //   return {
+    //     __esModule: true,
+    //     default: jest.fn(() => `<div>Mock</div>`),
+    //     render: jest.fn(() => `<div>Mock</div>`),
+    //   };
+    // });
+
     //Arrange
     render(<Greeting />);
 
